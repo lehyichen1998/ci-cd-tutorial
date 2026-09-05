@@ -27,7 +27,7 @@ jobs:
           git checkout -B UAT
           git push origin UAT --force
 
-      -name: Push to Prod branch
+      - name: Push to Prod branch
         run: |
           git checkout -B Prod
           git push origin Prod --force
