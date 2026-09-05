@@ -1,4 +1,4 @@
-name: Validate and Push Main to UAT and Prod
+name: Validate, Push Branches, and Deploy to Pages
 
 on:
   push:
@@ -7,10 +7,14 @@ on:
 
 permissions:
   contents: write
+  pages: write      # Required for GitHub Pages
+  id-token: write   # Required for security token authentication
 
 jobs:
-  validate-and-sync:
+  validate-sync-and-deploy:
     runs-on: ubuntu-latest
+    environment: DEV # Pulls your DEV environment secrets (NAME, EMAIL)
+
     steps:
       - name: Checkout main branch
         uses: actions/checkout@v4
@@ -30,16 +34,29 @@ jobs:
 
       # --- STEP 3: RUN TESTS (Optional/Recommended) ---
       # - name: Run Tests
-      #   run: npm test 
+      #   run: npm test
 
       # --- STEP 4: BUILD APPLICATION ---
       - name: Build Project
         env:
-            VITE_SECRET_NAME: ${{ secrets.NAME }}
-            VITE_SECRET_EMAIL: ${{ secrets.EMAIL }}
+          VITE_SECRET_NAME: ${{ secrets.NAME }}
+          VITE_SECRET_EMAIL: ${{ secrets.EMAIL }}
         run: npm run build
 
-      # --- STEP 5: SYNC BRANCHES (Only executes if Steps 2-4 succeed) ---
+      # --- STEP 5: DEPLOY TO GITHUB PAGES ---
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload Build Artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: './dist'
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+
+      # --- STEP 6: SYNC BRANCHES ---
       - name: Configure Git User
         run: |
           git config user.name "${{ secrets.NAME }}"
