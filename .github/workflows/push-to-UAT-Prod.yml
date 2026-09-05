@@ -30,7 +30,7 @@ jobs:
 
       # --- STEP 3: RUN TESTS (Optional/Recommended) ---
       - name: Run Tests
-        run: npm test -- --watchAll=false --passWithNoTests
+        run: npm test 
 
       # --- STEP 4: BUILD APPLICATION ---
       - name: Build Project
