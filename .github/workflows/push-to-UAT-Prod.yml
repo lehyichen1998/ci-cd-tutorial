@@ -1,4 +1,4 @@
-name: Push Main to UAT and Prod
+name: Validate and Push Main to UAT and Prod
 
 on:
   push:
@@ -9,14 +9,34 @@ permissions:
   contents: write
 
 jobs:
-  sync-to-uat-and-prod:
+  validate-and-sync:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout main branch
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0 # Fetch all history so branches can be merged smoothly
+          fetch-depth: 0
 
+      # --- STEP 1: SET UP NODE ENVIRONMENT ---
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      # --- STEP 2: INSTALL DEPENDENCIES ---
+      - name: Install Dependencies
+        run: npm ci
+
+      # --- STEP 3: RUN TESTS (Optional/Recommended) ---
+      - name: Run Tests
+        run: npm test -- --watchAll=false --passWithNoTests
+
+      # --- STEP 4: BUILD APPLICATION ---
+      - name: Build Project
+        run: npm run build
+
+      # --- STEP 5: SYNC BRANCHES (Only executes if Steps 2-4 succeed) ---
       - name: Configure Git User
         run: |
           git config user.name "lehyichen1998"
