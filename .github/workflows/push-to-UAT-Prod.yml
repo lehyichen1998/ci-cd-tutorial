@@ -20,6 +20,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }} # Ensures push permissions across branches
 
       # --- STEP 1: SET UP NODE ENVIRONMENT ---
       - name: Setup Node.js
@@ -46,6 +47,8 @@ jobs:
       # --- STEP 5: DEPLOY TO GITHUB PAGES ---
       - name: Setup Pages
         uses: actions/configure-pages@v5
+        with:
+          enablement: true # Forces GitHub Pages source to GitHub Actions (bypasses Jekyll)
 
       - name: Upload Build Artifact
         uses: actions/upload-pages-artifact@v3
