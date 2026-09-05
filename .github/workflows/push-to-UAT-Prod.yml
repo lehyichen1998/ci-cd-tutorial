@@ -1,4 +1,4 @@
-name: Push Main to UAT
+name: Push Main to UAT and Prod
 
 on:
   push:
@@ -7,9 +7,9 @@ on:
 
 permissions:
   contents: write
-  
+
 jobs:
-  sync-to-uat:
+  sync-to-uat-and-prod:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout main branch
@@ -29,5 +29,6 @@ jobs:
 
       - name: Push to Prod branch
         run: |
+          git checkout main
           git checkout -B Prod
           git push origin Prod --force
