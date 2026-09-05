@@ -34,6 +34,9 @@ jobs:
 
       # --- STEP 4: BUILD APPLICATION ---
       - name: Build Project
+        env:
+            VITE_SECRET_NAME: ${{ secrets.NAME }}
+            VITE_SECRET_EMAIL: ${{ secrets.EMAIL }}
         run: npm run build
 
       # --- STEP 5: SYNC BRANCHES (Only executes if Steps 2-4 succeed) ---

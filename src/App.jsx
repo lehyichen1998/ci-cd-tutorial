@@ -6,6 +6,8 @@ import './App.css'
 
 function App() {
   const [count, setCount] = useState(0)
+  const secretName = import.meta.env.VITE_SECRET_NAME || 'Developer';
+  const secretEmail = import.meta.env.VITE_SECRET_EMAIL || 'dev@example.com';
 
   return (
     <>
@@ -19,6 +21,9 @@ function App() {
           <h1>Get started</h1>
           <p>
             Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
+          </p>
+          <p>
+            {secretName} - {secretEmail}
           </p>
         </div>
         <button
